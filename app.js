@@ -1,10 +1,11 @@
 // Implementa las Solicitudes con Fetch
 const fetchBtn = document.getElementById("fetch-btn");
 const dataContainer = document.getElementById("data-container");
-const API_URL = "https://thronesapi.com/api/v2/Characters";
+const API_URL = "https://dragonball-api.com/api/characters";
 
 fetchBtn.addEventListener("click", () => {
-    fetch(API_URL)
+    let URL = API_URL + '?gender=Male';
+    fetch(URL)
     .then((response) => {
         if (!response.ok) {
         throw new Error("Error en la solicitud");
@@ -12,8 +13,10 @@ fetchBtn.addEventListener("click", () => {
         return response.json();
     })
     .then((data) => {
+        console.log(data);
+        
       // Completar: renderizar datos en el contenedor
-        const hombres = data.filter(c => c.gender === "Male");
+        const hombres = data;
         mostrarDatos(hombres);
     })
     .catch((error) => {
@@ -25,9 +28,12 @@ fetchBtn.addEventListener("click", () => {
 // Implementa las Solicitudes con Axios
 const axiosBtn = document.getElementById("axios-btn");
 axiosBtn.addEventListener("click", () => {
-    axios.get(API_URL)
+    let URL = API_URL + '?gender=Female';
+    axios.get(URL)
     .then(response => {
-        const mujeres = response.data.filter(c => c.gender === "Female");
+        console.log(response);
+        const mujeres = response.data;
+               
         mostrarDatos(mujeres);
     })
     .catch(error => {
@@ -39,13 +45,15 @@ axiosBtn.addEventListener("click", () => {
 // Ejemplo de función de renderizado:
 function mostrarDatos(characters) {
     dataContainer.innerHTML = "";
+    console.log(characters);
+
     characters.forEach((character) => {
     const div = document.createElement("div");
     div.classList.add("character");
     div.innerHTML = `
-        <h3>${character.fullName}</h3>
-        <p>${character.title || "Sin título"}</p>
-        <img src="${character.imageUrl}" alt="${character.fullName}">
+        <h3>${character.name}</h3>
+        <p>${character.race || "Sin raza"}</p>
+        <img src="${character.image}" alt="${character.name}" width=100>
         `;
     dataContainer.appendChild(div);
     });
